@@ -13,16 +13,22 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION(BlueprintCallable)
+		ATank* GetControlledTank() const;
+
 private:
 	void AimTowardsCrosshair();
 	bool GetSightRayHitLocation(FVector& HitLocation) const;
+	UPROPERTY(EditAnywhere)
+	float CrosshairXLocation=0.5;
+	UPROPERTY(EditAnywhere)
+	float CrosshairYLocation=0.25;
+	UPROPERTY(EditAnywhere)
+	float RayCastDistance=500000;
 
-public:
-	UPROPERTY(BlueprintReadWrite)
-	float RayCastDistance=50000;
-	UFUNCTION(BlueprintCallable)
-	ATank* GetControlledTank() const;
-	
+	void GetCrosshairScreenLocation(FVector2D& ScreenLocation) const;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
+	bool LineTrace(FVector Start, FVector Direction, FHitResult &HitResult) const;
 };

@@ -53,3 +53,16 @@ void ATankAIController::BeginPlay()
 	GetControlledTank();
 	GetPlayerControlledTank();
 }
+
+void ATankAIController::AimAtPlayer() {
+	ATank* player = GetPlayerControlledTank();
+	if (player) {
+		GetControlledTank()->AimAt(player->GetActorLocation());
+	}
+}
+
+void ATankAIController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	AimAtPlayer();
+}
