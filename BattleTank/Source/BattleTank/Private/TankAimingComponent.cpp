@@ -27,7 +27,11 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		BarrelPosition,
 		HitLocation,
 		LaunchSpeed,
-		ESuggestProjVelocityTraceOption::DoNotTrace
+		false,
+		0,
+		0
+		,
+		ESuggestProjVelocityTraceOption::DoNotTrace	//do not remove, required to avoid Engine bug
 		))
 	{
 		FVector AimDirection = TossVelocity.GetSafeNormal();
@@ -61,5 +65,6 @@ void UTankAimingComponent::SetTurretReference(UStaticMeshComponent* TurretRefere
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimDirectionAsRotator = AimDirection.Rotation();
-	UE_LOG(LogTemp,Warning, TEXT("Aim direction as rotator: %s"),*AimDirectionAsRotator.ToString())
+	UE_LOG(LogTemp, Warning, TEXT("Aim direction as rotator: %s"), *AimDirectionAsRotator.ToString())
+		Barrel->Elevate(1);	//TODO adapt value
 }

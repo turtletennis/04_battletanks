@@ -15,7 +15,8 @@ class UTankBarrel : public UStaticMeshComponent
 	GENERATED_BODY()
 	
 public:
-	void Elevate(float DegreesPerSecond);
+	//Elevate the barrel at a speed relative to the maximum rotation speed. Clamps from -1 to 1.
+	void Elevate(float RelativeSpeed);
 
 private:
 	// Maximum angular velocity of the barrel
