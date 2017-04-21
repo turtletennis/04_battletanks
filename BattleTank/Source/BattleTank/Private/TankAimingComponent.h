@@ -7,6 +7,8 @@
 #include "TankAimingComponent.generated.h"
 
 
+class UTankBarrel;
+//Responsible for aiming a tank's weapon
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UTankAimingComponent : public UActorComponent
 {
@@ -16,15 +18,14 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 	void AimAt(FVector HitLocation, float LaunchSpeed);
-	void SetBarrelReference(UStaticMeshComponent* BarrelReference);
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void SetBarrelReference(UTankBarrel* BarrelReference);
+	void SetTurretReference(UStaticMeshComponent* TurretReference);
+
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
 
 
 private:
-	UStaticMeshComponent* Barrel = nullptr;
-	
+	UTankBarrel* Barrel = nullptr;
+	UStaticMeshComponent* Turret = nullptr;
+	void MoveBarrelTowards(FVector Angle);
 };
