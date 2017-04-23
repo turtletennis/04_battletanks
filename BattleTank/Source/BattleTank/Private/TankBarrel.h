@@ -21,7 +21,7 @@ public:
 private:
 	// Maximum angular velocity of the barrel
 	UPROPERTY(EditAnywhere, Category = Setup)
-		float MaxDegreesPerSecond = 20; 
+		float MaxDegreesPerSecond = 5; 
 	// Minimum elevation angle of the barrel
 	UPROPERTY(EditAnywhere, Category = Setup)
 		float MinimumElevationDegrees = 0; 

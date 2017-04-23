@@ -8,6 +8,8 @@
 
 
 class UTankBarrel;
+class UTankTurret;
+
 //Responsible for aiming a tank's weapon
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UTankAimingComponent : public UActorComponent
@@ -19,13 +21,13 @@ public:
 	UTankAimingComponent();
 	void AimAt(FVector HitLocation, float LaunchSpeed);
 	void SetBarrelReference(UTankBarrel* BarrelReference);
-	void SetTurretReference(UStaticMeshComponent* TurretReference);
+	void SetTurretReference(UTankTurret* TurretReference);
 
 protected:
 
 
 private:
 	UTankBarrel* Barrel = nullptr;
-	UStaticMeshComponent* Turret = nullptr;
+	UTankTurret* Turret = nullptr;
 	void MoveBarrelTowards(FVector Angle);
 };

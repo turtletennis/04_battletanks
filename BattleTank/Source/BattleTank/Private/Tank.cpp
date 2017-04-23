@@ -38,7 +38,13 @@ void ATank::SetBarrelReference(UTankBarrel* BarrelReference)
 }
 
 
-void ATank::SetTurretReference(UStaticMeshComponent* TurretReference)
+void ATank::SetTurretReference(UTankTurret* TurretReference)
 {
 	AimingComponent->SetTurretReference(TurretReference);
+}
+
+void ATank::Fire()
+{
+	auto OurTankName = GetName();
+	UE_LOG(LogTemp, Warning, TEXT("%s firing"), *OurTankName);
 }

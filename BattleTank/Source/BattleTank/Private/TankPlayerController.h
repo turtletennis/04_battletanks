@@ -30,5 +30,5 @@ private:
 	void GetCrosshairScreenLocation(FVector2D& ScreenLocation) const;
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
-	bool LineTrace(FVector Start, FVector Direction, FHitResult &HitResult) const;
+	bool LineTrace(FVector Start, FVector Direction, TArray<FHitResult> &HitResults) const;
 };

@@ -12,7 +12,7 @@ ATank* ATankAIController::GetControlledTank() const
 	APawn* pawn = GetPawn();
 	if (pawn != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AI Pawn found: %s"), *pawn->GetName());
+		//UE_LOG(LogTemp, Warning, TEXT("AI Pawn found: %s"), *pawn->GetName());
 	}
 	else
 	{
@@ -32,11 +32,11 @@ ATank* ATankAIController::GetPlayerControlledTank() const
 		APawn* tank = Cast<ATankPlayerController>(playerController)->GetControlledTank();
 		if (tank != nullptr)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Player Pawn found by AI: %s"), *tank->GetName());
+			//UE_LOG(LogTemp, Warning, TEXT("Player Pawn found by AI: %s"), *tank->GetName());
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("AI Pawn NOT found by AI"));
+			UE_LOG(LogTemp, Warning, TEXT("Player Pawn NOT found by AI"));
 		}
 
 		return	Cast<ATank>(tank);
@@ -50,7 +50,6 @@ ATank* ATankAIController::GetPlayerControlledTank() const
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("AIController BeginPlay()"));
 	GetControlledTank();
 	GetPlayerControlledTank();
 }

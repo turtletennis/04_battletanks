@@ -6,7 +6,7 @@
 #include "Tank.generated.h"
 
 class UTankAimingComponent;
-
+class UTankTurret;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -18,10 +18,15 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrel* BarrelReference);
-	void SetTurretReference(UStaticMeshComponent* TurretReference);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretReference(UTankTurret* TurretReference);
+
+	UFUNCTION(BlueprintCallable, Category = Firing)
+		void Fire();
 
 	UPROPERTY(EditAnywhere, Category = Firing)
-		float FireSpeed = 100000;	//sensible starting value of 1000m/s
+		float FireSpeed = 5000;	//sensible starting value of 50m/s
 
 protected:
 	// Called when the game starts or when spawned

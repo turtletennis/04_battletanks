@@ -3,6 +3,7 @@
 #include "BattleTank.h"
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -40,10 +41,10 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 		//smoothly pitch the barrel and rotate the turret towards the aim direction
 		
-		UE_LOG(LogTemp, Warning, TEXT("%s aiming in direction: %s"), *OurTankName, *AimDirection.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("%s aiming in direction: %s"), *OurTankName, *AimDirection.ToString());
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("%s could not hit location: %s"), *OurTankName, *HitLocation.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("%s could not hit location: %s"), *OurTankName, *HitLocation.ToString());
 	}
 
 
@@ -57,7 +58,7 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelReference)
 	Barrel = BarrelReference;
 }
 
-void UTankAimingComponent::SetTurretReference(UStaticMeshComponent* TurretReference)
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretReference)
 {
 	Turret = TurretReference;
 }
@@ -65,6 +66,10 @@ void UTankAimingComponent::SetTurretReference(UStaticMeshComponent* TurretRefere
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimDirectionAsRotator = AimDirection.Rotation();
-	UE_LOG(LogTemp, Warning, TEXT("Aim direction as rotator: %s"), *AimDirectionAsRotator.ToString())
-		Barrel->Elevate(1);	//TODO adapt value
+	//UE_LOG(LogTemp, Warning, TEXT("Aim direction as rotator: %s"), *AimDirectionAsRotator.ToString())
+		auto DeltaRotator = AimDirectionAsRotator - BarrelRotator;
+		Barrel->Elevate(DeltaRotator.Pitch);
+		if (Turret) {
+			Turret->Rotate(DeltaRotator.Yaw);
+		}
 }
