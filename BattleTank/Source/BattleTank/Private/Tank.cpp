@@ -3,7 +3,8 @@
 #include "BattleTank.h"
 #include "Tank.h"
 #include "TankAimingComponent.h"
-
+#include "TankBarrel.h"
+#include "Projectile.h"
 
 // Sets default values
 ATank::ATank()
@@ -35,6 +36,7 @@ void ATank::AimAt(FVector HitLocation)
 void ATank::SetBarrelReference(UTankBarrel* BarrelReference)
 {
 	AimingComponent->SetBarrelReference(BarrelReference);
+	Barrel = BarrelReference;
 }
 
 
@@ -46,5 +48,18 @@ void ATank::SetTurretReference(UTankTurret* TurretReference)
 void ATank::Fire()
 {
 	auto OurTankName = GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s firing"), *OurTankName);
+	
+
+	if (!Barrel) { 
+		UE_LOG(LogTemp, Warning, TEXT("Barrel not set"));
+		return; 
+	}
+
+	// spawn a projectile at the socket location
+	auto SocketTransform = Barrel->GetSocketTransform(FName("ProjectileOrigin"));
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	auto NewProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, SocketTransform.GetLocation(), SocketTransform.GetRotation().Rotator(),SpawnParameters);
+	UE_LOG(LogTemp, Warning, TEXT("%s fired from %s"), *OurTankName,*NewProjectile->GetActorLocation().ToString());
+	//NewProjectile->
 }
