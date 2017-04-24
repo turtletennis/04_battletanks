@@ -41,13 +41,24 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 	}
 	
 	TArray<FHitResult> HitResults = TArray<FHitResult>();
+	
 	if (LineTrace(WorldLocation, WorldDirection, HitResults)) {
+		bool aimingThroughPlayer = false;
 		for (int i = 0; i < HitResults.Num(); i++) {
 			FHitResult HitResult = HitResults[i];
 			if (HitResult.IsValidBlockingHit()) {
 				if (HitResult.GetActor() != GetControlledTank()) {
+					if (aimingThroughPlayer)
+					{
+						UE_LOG(LogTemp, Warning, TEXT("Aiming through player tank actor, next hit is: %s"), *HitResult.ImpactPoint.ToString());
+					}
+
 					HitLocation = HitResult.ImpactPoint;
 					return true;
+				}else
+				{
+					aimingThroughPlayer = true;
+					UE_LOG(LogTemp, Warning, TEXT("%i hits, aiming through player tank actor: %s"),HitResults.Num(), *HitResult.ImpactPoint.ToString());
 				}
 			}
 			else
@@ -69,6 +80,7 @@ bool ATankPlayerController::LineTrace(FVector Start, FVector Direction, TArray<F
 	RV_TraceParams.bTraceComplex = true;
 	RV_TraceParams.bTraceAsyncScene = true;
 	RV_TraceParams.bReturnPhysicalMaterial = true;
+	RV_TraceParams.AddIgnoredActor(GetControlledTank());
 	
 	//do the line trace
 	return GetWorld()->LineTraceMultiByChannel(

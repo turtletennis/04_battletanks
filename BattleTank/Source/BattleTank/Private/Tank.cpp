@@ -60,6 +60,7 @@ void ATank::Fire()
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	auto NewProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, SocketTransform.GetLocation(), SocketTransform.GetRotation().Rotator(),SpawnParameters);
+	NewProjectile->LaunchProjectile(FireSpeed);
 	UE_LOG(LogTemp, Warning, TEXT("%s fired from %s"), *OurTankName,*NewProjectile->GetActorLocation().ToString());
 	//NewProjectile->
 }

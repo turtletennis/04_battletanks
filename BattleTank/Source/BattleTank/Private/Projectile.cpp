@@ -9,6 +9,8 @@ AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Movement Component"));
+	MovementComponent->bAutoActivate = false;
 
 }
 
@@ -17,6 +19,11 @@ void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AProjectile::LaunchProjectile(float speed) {
+	MovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * speed);
+	MovementComponent->Activate();
 }
 
 // Called every frame
