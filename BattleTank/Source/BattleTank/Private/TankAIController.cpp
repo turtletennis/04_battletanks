@@ -5,64 +5,29 @@
 #include "TankPlayerController.h"
 #include "Tank.h"
 
-
-
-ATank* ATankAIController::GetControlledTank() const
-{
-	APawn* pawn = GetPawn();
-	if (pawn != nullptr)
-	{
-		//UE_LOG(LogTemp, Warning, TEXT("AI Pawn found: %s"), *pawn->GetName());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AI Pawn NOT found"));
-	}
-
-	return	Cast<ATank>(pawn);
-
-}
-
-
-ATank* ATankAIController::GetPlayerControlledTank() const
-{
-	auto playerController = GetWorld()->GetFirstPlayerController();
-	if (playerController) {
-
-		APawn* tank = Cast<ATankPlayerController>(playerController)->GetControlledTank();
-		if (tank != nullptr)
-		{
-			//UE_LOG(LogTemp, Warning, TEXT("Player Pawn found by AI: %s"), *tank->GetName());
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Player Pawn NOT found by AI"));
-		}
-
-		return	Cast<ATank>(tank);
-	}
-
-	return nullptr;
-
-}
-
-
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	GetControlledTank();
-	GetPlayerControlledTank();
+	ErrorProbability = FMath::Clamp(ErrorProbability, 0.0f, 1.0f);
+	APawn* pawn = GetPawn();
+	ControlledTank = Cast<ATank>(pawn);
+
+	auto playerController = GetWorld()->GetFirstPlayerController();
+	PlayerTank = Cast<ATank>(Cast<ATankPlayerController>(playerController)->GetControlledTank());
+	
 }
 
 void ATankAIController::AimAtPlayer() {
-	ATank* player = GetPlayerControlledTank();
-	if (player) {
-		GetControlledTank()->AimAt(player->GetActorLocation());
+	auto aimLocation = PlayerTank->GetActorLocation();
+	if (FMath::RandRange(0.0f, 1.0f) < ErrorProbability) {
+		aimLocation += FMath::VRand()*ErrorBounds;
 	}
+	ControlledTank->AimAt(aimLocation);
 }
 
 void ATankAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	AimAtPlayer();
+	ControlledTank->Fire();
 }

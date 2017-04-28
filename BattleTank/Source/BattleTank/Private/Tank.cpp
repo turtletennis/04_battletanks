@@ -49,18 +49,15 @@ void ATank::Fire()
 {
 	auto OurTankName = GetName();
 	
-
-	if (!Barrel) { 
-		UE_LOG(LogTemp, Warning, TEXT("Barrel not set"));
-		return; 
+	bool IsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (Barrel && IsReloaded) {
+		// spawn a projectile at the socket location
+		auto SocketTransform = Barrel->GetSocketTransform(FName("ProjectileOrigin"));
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		auto NewProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, SocketTransform.GetLocation(), SocketTransform.GetRotation().Rotator(), SpawnParameters);
+		NewProjectile->LaunchProjectile(FireSpeed);
+		UE_LOG(LogTemp, Warning, TEXT("%s fired from %s"), *OurTankName, *NewProjectile->GetActorLocation().ToString());
+		LastFireTime = FPlatformTime::Seconds();
 	}
-
-	// spawn a projectile at the socket location
-	auto SocketTransform = Barrel->GetSocketTransform(FName("ProjectileOrigin"));
-	FActorSpawnParameters SpawnParameters;
-	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	auto NewProjectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, SocketTransform.GetLocation(), SocketTransform.GetRotation().Rotator(),SpawnParameters);
-	NewProjectile->LaunchProjectile(FireSpeed);
-	UE_LOG(LogTemp, Warning, TEXT("%s fired from %s"), *OurTankName,*NewProjectile->GetActorLocation().ToString());
-	//NewProjectile->
 }

@@ -19,7 +19,7 @@ public:
 
 private:
 	// Maximum angular velocity of the turret
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float MaxDegreesPerSecond = 5;
 
 };
