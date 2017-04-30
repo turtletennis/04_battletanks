@@ -39,6 +39,16 @@ void ATank::SetBarrelReference(UTankBarrel* BarrelReference)
 	Barrel = BarrelReference;
 }
 
+void ATank::SetLeftTrackReference(UTankTrack* TrackReference) 
+{
+	LeftTrack = TrackReference;
+}
+
+void ATank::SetRightTrackReference(UTankTrack* TrackReference)
+{
+	RightTrack = TrackReference;
+}
+
 
 void ATank::SetTurretReference(UTankTurret* TurretReference)
 {
