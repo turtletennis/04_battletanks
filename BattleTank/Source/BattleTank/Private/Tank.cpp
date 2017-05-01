@@ -3,8 +3,11 @@
 #include "BattleTank.h"
 #include "Tank.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Projectile.h"
+#include "TankTrack.h"
 
 // Sets default values
 ATank::ATank()
@@ -14,6 +17,38 @@ ATank::ATank()
 	AimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 }
 
+void ATank::Initialise(UTankBarrel* BarrelReference, UTankTurret* TurretReference, UTankTrack* LeftTrackReference, UTankTrack* RightTrackReference, UTankMovementComponent* MovementComponentToSet)
+{
+	AimingComponent->SetBarrelReference(BarrelReference);
+	Barrel = BarrelReference;
+	AimingComponent->SetTurretReference(TurretReference);
+	LeftTrack = LeftTrackReference;
+	RightTrack = RightTrackReference;
+	MovementComponent = MovementComponentToSet;
+	MovementComponent->Initialise(LeftTrack, RightTrack);
+	TArray<UPrimitiveComponent*> MyComponents;
+	MyComponents.Add(Barrel);
+	MyComponents.Add(TurretReference);
+	MyComponents.Add(LeftTrack);
+	MyComponents.Add(RightTrack);
+	//tank body \/
+	MyComponents.Add(Cast<UPrimitiveComponent>(GetRootComponent()));
+	TArray<AActor*> IgnoreActors;
+	IgnoreActors.Add(GetOwner());
+
+	for (int i = 0; i < MyComponents.Num(); i++)
+	{
+		MyComponents[i]->MoveIgnoreComponents = MyComponents;
+		MyComponents[i]->MoveIgnoreActors = IgnoreActors;
+	}
+	for (int i = 0; i < MyComponents.Num(); i++)
+	{
+		MyComponents[i]->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+		MyComponents[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		MyComponents[i]->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Tank Initialisation completed"))
+}
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
