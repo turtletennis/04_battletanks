@@ -17,11 +17,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Movement)
 	void IntendMoveForward(float Throw);
+	
 	UFUNCTION(BlueprintCallable, Category = Movement)
 	void IntendTurnRight(float Throw);
 	//Initialises the component, setting the left and right tank tracks.
+	
 	UFUNCTION(BlueprintCallable, Category = Setup)
-		void Initialise(UTankTrack *Left, UTankTrack *Right);
+	void Initialise(UTankTrack *Left, UTankTrack *Right);
+
+	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
+
 private:
 	UTankTrack *LeftTrack = nullptr;
 	UTankTrack *RightTrack = nullptr;
